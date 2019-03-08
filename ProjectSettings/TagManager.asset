@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Enemies_Light
+  - Teleport_Btm
+  - Enemy
+  - Enemies_InBubble
+  - Enemy_ZenChan
+  - Enemy_Kudo
+  - Collectable
+  - EnemyBlocker
+  - Projectile
+  - Enemy_Projectile
+  - Powerup_JumpMode
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - Wall
+  - Bubble
+  - Player
+  - Collectiable
+  - Enemy
+  - Enemy_Projectile
+  - EnemyInBubble
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BackGround
+    uniqueID: 1146279211
+    locked: 0
+  - name: MidGround
+    uniqueID: 81559415
+    locked: 0
+  - name: ForeGround
+    uniqueID: 3777834329
+    locked: 0
+  - name: Player
+    uniqueID: 2833748571
+    locked: 0
