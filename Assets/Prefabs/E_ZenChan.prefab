@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4995057213243809286}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0000000025766957, z: 0}
+  m_LocalPosition: {x: -0.063, y: 0.0000000025766957, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 5271929074668198787}
@@ -192,19 +192,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfc98a4074f0284985e0c2a83913fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyBase:
+  enemy:
     anim: {fileID: 5271929074689749858}
-    speed: 3
+    speed: 2
     EnemyType: 1
     EnemyHealth: 1
-    EnemyName: ZenChen
+    EnemyName: ZenChan
     fruitItem: {fileID: 7424646591883622680, guid: 34a3d0ab2f96b2e4fad135ca49f71c42,
       type: 3}
-  changeBubble: {fileID: 8469682225104448163, guid: 5d4d095bf67084a4eb789d509c8a6706,
-    type: 3}
-  isFacingRight: 0
-  fireRate: 2
-  projectile: {fileID: 4742562611202320789, guid: 82cda4ac747ff6643b87f6cb24217638,
-    type: 3}
-  projectileSpawnPoint: {fileID: 5271929074648294168}
-  projectileForce: 5
+    projectile: {fileID: 4742562611202320789, guid: 82cda4ac747ff6643b87f6cb24217638,
+      type: 3}
+    projectileForce: 3
+    projectileSpawnPoint: {fileID: 5271929074648294168}
+    changeBubble: {fileID: 8469682225104448163, guid: 5d4d095bf67084a4eb789d509c8a6706,
+      type: 3}
+    fireRate: 2
+    isFacingRight: 0

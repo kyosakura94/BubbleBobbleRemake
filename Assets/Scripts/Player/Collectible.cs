@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Collectible : MonoBehaviour {
+
     int _points;
 
     // Use this for initialization

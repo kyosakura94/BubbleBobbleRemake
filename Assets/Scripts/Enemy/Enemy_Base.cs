@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 
-public class Enemy_Base {
+public abstract class Enemy_Base {
 
     public enum Type{
         Range,
@@ -21,4 +20,20 @@ public class Enemy_Base {
     public string EnemyName;
 
     public Rigidbody2D fruitItem;
+    public Rigidbody2D projectile;
+
+    public float projectileForce;
+
+    public Transform projectileSpawnPoint;
+
+    public Rigidbody2D changeBubble;
+    public float fireRate;
+    public bool isFacingRight;
+
+    public virtual void Attack() {
+    }
+    public virtual void flip(GameObject player) {
+    }
+    public virtual void Dead(GameObject player) { }
+
 }

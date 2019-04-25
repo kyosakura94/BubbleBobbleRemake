@@ -4,22 +4,17 @@ using UnityEngine;
 
 public class Enemy_ZoneAttack : MonoBehaviour
 {
-    public Enemy_Base enemyBase;
-    float timeSinceLastFire;
-    public bool isFacingPlayer;
-    public bool isFacingRight;
 
-    public float fireRate;
+    public bool isFacingPlayer;
     bool status = true;
     private bool isMoving = true;
 
     Rigidbody2D rb;
 
-    public Rigidbody2D projectile;
-    public Transform projectileSpawnPoint;
-    public float projectileForce;
+    public Enemy enemy;
+    float timeSinceLastFire;
 
-    public Rigidbody2D changeBubble;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,10 +25,10 @@ public class Enemy_ZoneAttack : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
 
-        enemyBase.anim.GetComponent<Animator>();
+        enemy.anim.GetComponent<Animator>();
 
         // Check if 'anim' variable was set in the inspector
-        if (!enemyBase.anim)
+        if (!enemy.anim)
         {
             // Prints a warning message to the Console
             // - Open Console by going to Window-->Console (or Ctrl+Shift+C)
@@ -43,15 +38,14 @@ public class Enemy_ZoneAttack : MonoBehaviour
     void Update()
     {
         if (isMoving)
-        {
-            
+        {    
             if (rb)
-                if (!isFacingRight)
+                if (!enemy.isFacingRight)
                     // Make player move left 
-                    rb.velocity = new Vector2(-enemyBase.speed, rb.velocity.y);
+                    rb.velocity = new Vector2(-enemy.speed, rb.velocity.y);
                 else
                     // Make player move right 
-                    rb.velocity = new Vector2(enemyBase.speed, rb.velocity.y);
+                    rb.velocity = new Vector2(enemy.speed, rb.velocity.y);
         }
 
             
@@ -61,15 +55,15 @@ public class Enemy_ZoneAttack : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            enemyBase.anim.SetBool("isStop", false);
+            enemy.anim.SetBool("isStop", false);
             rb.bodyType = RigidbodyType2D.Dynamic;
             isMoving = true;
 
             status = true;
 
-            if (!isFacingRight)
+            if (!enemy.isFacingRight)
             {
-                flip();
+                enemy.flip(gameObject);
             }
         }
     }
@@ -77,8 +71,8 @@ public class Enemy_ZoneAttack : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("EnemyBlocker"))
-        {    
-            flip();
+        {
+            enemy.flip(gameObject);
         }
     }
 
@@ -86,143 +80,56 @@ public class Enemy_ZoneAttack : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            enemyBase.anim.SetBool("isStop", true);
+            enemy.anim.SetBool("isStop", true);
             rb.bodyType = RigidbodyType2D.Static;
             isMoving = false;
-
-            // coolDown += Time.deltaTime;
-            // if(coolDown > fireRate)
-            //bool status = true;
 
             if (status)
             {
                 isFacingPlayer = collision.GetComponent<Character>().m_FacingRight;
 
-                if (isFacingPlayer != isFacingRight)
+                if (isFacingPlayer != enemy.isFacingRight)
                 {
-                    //Debug.Log("Khac");
-                    //Vector3 scaleFactor = transform.localScale;
+                    enemy.flip(gameObject);
 
-                    //// Change sign of scale in 'x'
-                    //scaleFactor.x *= -1; // or - -scaleFactor.x
-
-                    //// Assign updated value back to 'localScale'
-                    //transform.localScale = scaleFactor;
-                    flip();
-
-                }
-                
+                }      
                 status = false;
             }
 
-            //if (isFacingPlayer != collision.GetComponent<Character>().m_FacingRight)
-            //{
-            //    flip();
-            //}
-            //if (isFacingPlayer)
-            //{
-            //    Vector3 theScale = transform.localScale;
-
-            //    theScale.x *= -1;
-
-            //    transform.localScale = theScale;
-            //}
-            //else
-            //{
-            //    Vector3 theScale = transform.localScale;
-
-            //    theScale.x *= 1;
-
-            //    transform.localScale = theScale;
-            //}
-
-            if (Time.time > timeSinceLastFire + fireRate)
+            if (Time.time > timeSinceLastFire + enemy.fireRate)
             {
-                enemyBase.anim.SetTrigger("isAttack");
-                //fire();
-
+                enemy.anim.SetTrigger("isAttack");
                 timeSinceLastFire = Time.time;
             }
-            Debug.Log("it moving");
         }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (!collision.gameObject.CompareTag("Ground"))
-        //   flip();
 
         if (collision.gameObject.CompareTag("Projectile"))
         {
             Destroy(collision.gameObject);
 
-            enemyBase.EnemyHealth--;
-            Debug.Log("Enemyhealth" + enemyBase.EnemyHealth);
-            if (enemyBase.EnemyHealth-- <= 0)
+            enemy.EnemyHealth--;
+            Debug.Log("Enemyhealth" + enemy.EnemyHealth);
+            if (enemy.EnemyHealth-- <= 0)
             {
-                // No Animation Event
-                //Destroy(gameObject);
-                // Animation Event
-                // -Start Animation
-                //enemyBase.anim.SetTrigger("Death");
                 Vector3 pos = gameObject.transform.position + new Vector3(0.0f, 2.0f, 0.0f);
-
-                Rigidbody2D temp = Instantiate(changeBubble, pos, gameObject.transform.rotation);
+                Rigidbody2D temp = Instantiate(enemy.changeBubble, pos, gameObject.transform.rotation);
 
                 temp.AddForce(gameObject.transform.right * 0.2f, ForceMode2D.Impulse);
-
-                //enemy = collision.gameObject.GetComponent("Enemy") as Enemy;
-
-                temp.GetComponent<Enemy_InBubble>().fruitItem = enemyBase.fruitItem;
-                temp.GetComponent<Enemy_InBubble>().enemiesName = enemyBase.EnemyName;
+                temp.GetComponent<Enemy_InBubble>().fruitItem = enemy.fruitItem;
+                temp.GetComponent<Enemy_InBubble>().enemiesName = enemy.EnemyName;
 
                 Destroy(gameObject);
             }
         }
     }
-    void flip()
-    {
-        // Toggle variable
-        isFacingRight = !isFacingRight;
-
-        // Keep a copy of 'localScale' because scale cannot be changed directly
-        Vector3 scaleFactor = transform.localScale;
-
-        // Change sign of scale in 'x'
-        scaleFactor.x *= -1; // or - -scaleFactor.x
-
-        // Assign updated value back to 'localScale'
-        transform.localScale = scaleFactor;
-    }
 
     void fire()
     {
-        //Check if 'projectileSpawnPoint' and 'projectile' exist
-        if (projectileSpawnPoint && projectile)
-        {
-            //Create the 'Projectile' and add to Scene
-            Rigidbody2D temp = Instantiate(projectile, projectileSpawnPoint.position,
-                projectileSpawnPoint.rotation);
-
-            //Stop 'Character' from hitting 'Projectile'
-            Physics2D.IgnoreCollision(GetComponent<Collider2D>(),
-                temp.GetComponent<Collider2D>(), true);
-
-            //Check what direction 'Character' is facing before firing
-            if (isFacingRight)
-            {
-                temp.transform.Rotate(0, 180, 0);
-                temp.AddForce(projectileSpawnPoint.right * projectileForce, ForceMode2D.Impulse);
-            }
-            else
-            {
-                //temp.transform.Rotate(0, -180, 0);
-                temp.AddForce(-projectileSpawnPoint.right * projectileForce, ForceMode2D.Impulse);
-
-            }
-        }
-
+        enemy.Attack();
     }
-
 
 }

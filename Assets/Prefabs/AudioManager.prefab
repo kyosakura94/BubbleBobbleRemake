@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1052293800468561395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1052293800468561393}
+  - component: {fileID: 1052293800468561394}
+  - component: {fileID: 3797959409963592272}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1052293800468561393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052293800468561395}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.41489783, y: -5.0746274, z: -0.03958557}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1052293800468561394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052293800468561395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020f60eddbe3998418e97688085249d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: TileMusic
+    clip: {fileID: 8300000, guid: b555ea8de08a9f3439f96684288f6781, type: 3}
+    volume: 0.352
+    pitch: 0.87
+    loop: 1
+    source: {fileID: 0}
+  - name: PlayingMusic
+    clip: {fileID: 8300000, guid: 6d9ed9b9295466c499f4f9a89a15b459, type: 3}
+    volume: 0.2
+    pitch: 0.87
+    loop: 1
+    source: {fileID: 0}
+  - name: Enemydeath
+    clip: {fileID: 8300000, guid: d43216f738de52849be2de83e6fb5ddf, type: 3}
+    volume: 0.6
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Enemyhit
+    clip: {fileID: 8300000, guid: 7955c1e593f63f44dbb9ebee181f3a37, type: 3}
+    volume: 0.05
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Playerdeath
+    clip: {fileID: 8300000, guid: 0ce4dbd78b4ff3944ac048dd1eb0e7f5, type: 3}
+    volume: 0.537
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Playerhit
+    clip: {fileID: 8300000, guid: 1088ddf71c6792d428d9e9cc7e76fd3f, type: 3}
+    volume: 0.5
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Playerjump
+    clip: {fileID: 8300000, guid: 5b3fc9342ddf89042bb53c1e5d684cba, type: 3}
+    volume: 0.595
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Collectiblecollected
+    clip: {fileID: 8300000, guid: 060e83cb66e18994786f990a38206c19, type: 3}
+    volume: 0.5
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Powerupcollected
+    clip: {fileID: 8300000, guid: 13facaa5f2305a345bbe84545eaf8254, type: 3}
+    volume: 0.5
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: Gameovermusic
+    clip: {fileID: 8300000, guid: e89f99459f91d7141a8c8eefc204493d, type: 3}
+    volume: 0.05
+    pitch: 0.87
+    loop: 1
+    source: {fileID: 0}
+  - name: other
+    clip: {fileID: 8300000, guid: 09e66ba636b6b13429e755889301bc0d, type: 3}
+    volume: 0.565
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: bubbleexlp
+    clip: {fileID: 8300000, guid: 3dceb7b294d0d014e9fb7d775fc5c5e1, type: 3}
+    volume: 0.608
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerWalk
+    clip: {fileID: 8300000, guid: d9889e5d804936b42b8abafc042c86cf, type: 3}
+    volume: 0.414
+    pitch: 0.87
+    loop: 0
+    source: {fileID: 0}
+--- !u!81 &3797959409963592272
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052293800468561395}
+  m_Enabled: 1

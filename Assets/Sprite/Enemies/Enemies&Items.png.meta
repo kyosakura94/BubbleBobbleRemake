@@ -27,6 +27,12 @@ TextureImporter:
     21300044: Enemy_projectile_Xu2
     21300046: E_Xu_Gethit_01
     21300048: E_Xu_Die_01
+    21300050: Item_heart
+    21300052: Bubble_exploision1
+    21300054: Bubble_exploision2
+    21300056: Bubble_exploision3
+    21300058: Bubble_exploision4
+    21300060: Bubble_exploision5
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -584,6 +590,126 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 838e0b073ae29c94296ee97ba45fc480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Item_heart
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 369
+        width: 60
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 910bbb284f7445546bcaa0b80ecc57ce
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble_exploision1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 698
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1981ca3e1078354381044d90e8666e5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble_exploision2
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 700
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7b3d04c765193543bd5ccd7de192ee0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble_exploision3
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 698
+        width: 32
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19003f353ccf69849be573a567839fa5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble_exploision4
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 250
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6089abc237ec304c978225af8dcff71
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble_exploision5
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 289
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ae3cd8d04c60d24bb2d90c47aee692d
       vertices: []
       indices: 
       edges: []

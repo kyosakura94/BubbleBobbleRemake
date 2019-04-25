@@ -15,6 +15,19 @@ TagManager:
   - Projectile
   - Enemy_Projectile
   - Powerup_JumpMode
+  - Level_1
+  - Level_2
+  - Level_0
+  - StartLevel
+  - Startpoint
+  - CamPos
+  - ESpawn_pos
+  - PlayerFirstSpawn
+  - SpawnPosition
+  - Canvas_HUD
+  - Top
+  - Heart
+  - Emty
   layers:
   - Default
   - TransparentFX
@@ -32,8 +45,8 @@ TagManager:
   - Enemy
   - Enemy_Projectile
   - EnemyInBubble
-  - 
-  - 
+  - Empty
+  - Obstacle
   - 
   - 
   - 

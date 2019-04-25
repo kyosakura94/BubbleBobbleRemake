@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour {
     //Rigidbody2D rb;
@@ -33,20 +34,61 @@ public class Character : MonoBehaviour {
 
     float chargeTime = 0.0f;
 
+    int _points;
 
-    public Transform topTeleport;
+    //public Transform topTeleport;
     private bool status = true;
 
     public bool isGodMode;
     public float jumpBoost;
     public float powerUpTime;
+    public float changelevelTime;
+    public float teleportTime = 0.1f;
+
+    //For lifeHeart
+    public List<Image> lifeHeart = new List<Image>();
+    public Image heartPrefab;
+    public Transform heartSpacer;
+    public Text lifeText;
+
+    //for score
+    public Text txtScore;
+
+    public ParticleSystem deathExpotion;
+    public ParticleSystem bubbleExpotion;
+
+    //public List<GameObject> level = new List<GameObject>();
+    //public List<GameObject> enemyinlevel = new List<GameObject>();
+    //public int currentlevel;
+
+
+    public Transform startPoint;
+    private float lastSqrMag;
+
 
     // Use this for initialization
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        lastSqrMag = Mathf.Infinity;
+    }
+
     void Start() {
 
-        animator = GetComponent<Animator>();
+        lifeText = GameObject.Find("LifeText").GetComponent<UnityEngine.UI.Text>();
+        txtScore = GameObject.Find("Txt_Score").GetComponent<UnityEngine.UI.Text>();
+        heartSpacer = GameObject.Find("Heart_spacer").GetComponent<UnityEngine.Transform>();
+
+
+        GameObject[] go = GameObject.FindGameObjectsWithTag("Heart");
+
+        for (int i = 0; i < go.Length; i++)
+        {
+            Destroy(go[i]);
+        }
 
         rb2 = GetComponent<Rigidbody2D>();
+
         if (!rb2)
         {
             Debug.LogWarning("Rigidbody2D not found on " + name + ". Adding one by default");
@@ -76,7 +118,6 @@ public class Character : MonoBehaviour {
             groundCheckRadius = 0.1f;
 
         }
-
         if (!projectile)
         {
             Debug.LogError("Projectile is not found on");
@@ -103,128 +144,186 @@ public class Character : MonoBehaviour {
             flyTime = 1.0f;
             Debug.LogWarning("LifeTime of flyTime is not set. Default to" + flyTime);
         }
+        if (changelevelTime <= 0)
+        {
+            flyTime = 10.0f;
+            Debug.LogWarning("LifeTime of flyTime is not set. Default to" + flyTime);
+        }
 
-        animator.SetBool("isPowerUp", false);   
+        if (txtScore)
+            txtScore.text = "Score: " + points;
+
+        animator.SetBool("isPowerUp", false);
+
+        for (int i = 0; i < life; i++)
+        {
+            Image newHeart = Instantiate(heartPrefab) as Image;
+            lifeHeart.Add(newHeart);
+        }
+
+        for (int i = 0; i < lifeHeart.Count; i++)
+        {
+            if (i >= 3)
+            {
+                break;
+            }
+
+            Image item = lifeHeart[i];
+            item.transform.SetParent(heartSpacer, false);
+        }
     }
 
-    // Update is called once per frame
     void Update() {
 
-        float moveValue = Input.GetAxisRaw("Horizontal") * speed;
-        Debug.Log("Presing " + moveValue);
-
-        animator.SetFloat("isRun", Mathf.Abs(moveValue));
-
-        if (groundCheck)
+        if (GameManager.instance.gm == GameState.LevelSetup)
         {
-            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, isGroundLayer);
+            gameObject.tag = "StartLevel";
         }
-
-        if (isGrounded)
+    
+        if (GameManager.instance.gm == GameState.Starting)
         {
-            Debug.Log(isGrounded);
-            animator.SetBool("isJump", false);
-            //animator.SetBool("isFlyIdle", false);
-        }
+            gameObject.tag = "StartLevel";
 
-        if (isGrounded)
-        {
-            if (Input.GetButtonDown("Jump"))
+            animator.SetBool("isChange", true);
+
+
+            Vector3 direction = (GameManager.instance.startpoint.transform.position - gameObject.transform.position).normalized;
+
+            rb2.MovePosition(transform.position + direction * speed * Time.deltaTime);
+
+            float sqrMag = (GameManager.instance.startpoint.transform.position - gameObject.transform.position).sqrMagnitude;
+
+            if (sqrMag > lastSqrMag)
             {
-                rb2.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                animator.SetBool("isJump", true);
+                rb2.velocity = Vector3.zero;
             }
 
-            if (Input.GetButton("Fire2"))
-            {
-                chargeTime += Time.deltaTime;
-                Debug.Log(chargeTime);
-                animator.SetBool("isFlyIdle", false);
-                animator.SetBool("isFly", true);
-                //animator.SetBool("isFlyIdle", true);
-                //animator.SetTrigger("isTrickIdle");
-                //StartCoroutine(stopFlyMode());
-                //if (chargeTime >= 2.0f)
-                //{
-                //    animator.SetTrigger("isTrickIdle");
-                //}
+            lastSqrMag = sqrMag;
+        }
 
+        if (GameManager.instance.gm == GameState.Game)
+        {
+
+            if (lifeHeart.Count != life)
+            {
+                lifeHeart.RemoveAt(lifeHeart.Count - 1);
+                Destroy(lifeHeart[lifeHeart.Count - 1].gameObject);
             }
 
-            if (Input.GetButtonUp("Fire2"))
-            {             
+            animator.SetBool("isChange", false);
+            gameObject.tag = "Player";
+
+            if (GameManager.instance.currentEnemy.Count <= 0)
+            {
+                animator.SetBool("isChange", true);
+                animator.SetFloat("isRun", 0);
+                animator.SetBool("isJump", false);
                 animator.SetBool("isFly", false);
-                if (chargeTime >= 0.4f)
-                {
-                    animator.SetBool("isFlyIdle", true);
-                    rb2.gravityScale = -0.1f;
-
-                }
-                Debug.Log("gravityScale" + rb2.gravityScale);
-
-                m_AirControl = true;
-
-                Move(moveValue);
-                chargeTime = 0.0f;
-                //rb2.gravityScale = 3.0f;
             }
 
-            //if (Input.GetButtonUp("Fire2"))
-            //{
-            //    animator.SetBool("isFlyIdle", true);
-            //    chargeTime = 0.0f;
-            //    //rb2.gravityScale = 3.0f;
-
-            //}
-            //else
-            //{
-            //    animator.SetBool("isFly", false);
-            //    //animator.SetBool("isFlyIdle", false);
-            //    //isFlyMode = false;
-            //}
-        }
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            animator.SetTrigger("Attack");
-
-        }
-
-        if (m_AirControl)
-        {
-            if (Input.GetButtonDown("Fire3"))
+            if (lifeHeart.Count >= 0)
             {
-                animator.SetBool("isFlyIdle", false);
-                rb2.gravityScale = 2.5f;
-                m_AirControl = false;
+                lifeText.text = lifeHeart.Count + "X";
             }
-        }
-        
-        if (isDead && status)
-        {
-            Debug.Log("Player is Dead");
-            animator.SetBool("isDie", true);
-            status = false;
-            rb2.AddForce(Vector2.up * 12.0f, ForceMode2D.Impulse);
-            rb2.GetComponent<CircleCollider2D>().isTrigger = true;
-            StartCoroutine(Death());    
-        }
 
-        Move(moveValue);
+            float moveValue = Input.GetAxisRaw("Horizontal") * speed;
+
+            animator.SetFloat("isRun", Mathf.Abs(moveValue));
+
+            if (groundCheck)
+            {
+                isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, isGroundLayer);
+            }
+
+            if (isGrounded)
+            {
+                animator.SetBool("isJump", false);
+                //animator.SetBool("isFlyIdle", false);
+            }
+
+            if (isGrounded)
+            {
+                if (Input.GetButtonDown("Jump"))
+                {
+                    FindObjectOfType<AudioManager>().Play("Playerjump");
+
+                    rb2.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    animator.SetBool("isJump", true);
+                }
+
+                if (Input.GetButton("Fire2"))
+                {
+                    chargeTime += Time.deltaTime;
+                    Debug.Log(chargeTime);
+                    animator.SetBool("isFlyIdle", false);
+                    animator.SetBool("isFly", true);
+                }
+
+                if (Input.GetButtonUp("Fire2"))
+                {
+                    animator.SetBool("isFly", false);
+                    if (chargeTime >= 0.4f)
+                    {
+                        animator.SetBool("isFlyIdle", true);
+                        rb2.gravityScale = -0.1f;
+
+                    }
+                    Debug.Log("gravityScale" + rb2.gravityScale);
+
+                    m_AirControl = true;
+
+                    Move(moveValue);
+                    chargeTime = 0.0f;
+                    //rb2.gravityScale = 3.0f;
+                }
+            }
+
+            if (Input.GetButtonDown("Fire1"))
+            {
+                FindObjectOfType<AudioManager>().Play("Playerhit");
+                animator.SetTrigger("Attack");
+            }
+
+            if (m_AirControl)
+            {
+                if (Input.GetButtonDown("Fire3"))
+                {
+                    animator.SetBool("isFlyIdle", false);
+                    rb2.gravityScale = 2.5f;
+                    m_AirControl = false;
+                }
+            }
+
+            if (isDead && status)
+            {
+                Debug.Log("Player is Dead");
+                animator.SetBool("isDie", true);
+                status = false;
+                rb2.AddForce(Vector2.up * 12.0f, ForceMode2D.Impulse);
+                rb2.GetComponent<CircleCollider2D>().isTrigger = true;
+
+                StartCoroutine(Death());
+
+                GameManager.instance.gm = GameState.GameOver;
+            }
+
+            Move(moveValue);
+        }
     }
+
+
     IEnumerator Death() {
         yield return new WaitForSeconds(3.0f);
         Destroy(gameObject);
     }
+
     public void BlowBubble() {
 
         Debug.Log("Blow bubble");
         if (projectile && projectileSpawPoint)
         {
             Rigidbody2D temp = Instantiate(projectile, projectileSpawPoint.position, projectileSpawPoint.rotation);
-            //most do it in GameManager
-            //Physics2D.IgnoreCollision(GetComponent<Collider2D>());
-            //Physics2D.GetIgnoreLayerCollision
+
             if (m_FacingRight)
             {
                 temp.AddForce(projectileSpawPoint.right * projectileForce, ForceMode2D.Impulse);
@@ -252,13 +351,7 @@ public class Character : MonoBehaviour {
         animator.SetBool("isFly", false);
         rb2.gravityScale = gravity;
         animator.SetTrigger("isTrickIdle");
-        
-        //if (!isGrounded)
-        //{
-        //    animator.SetBool("isFly", false);
-        //    animator.SetBool("isIdle", true);
 
-        //}     
     }
 
     public void Move(float move)
@@ -266,11 +359,16 @@ public class Character : MonoBehaviour {
         //only control the player if grounded or airControl is turned on
         if (isGrounded || m_AirControl)
         {
-            Debug.Log("He is moving");
-
             Vector3 targetVelocity = new Vector2(move, rb2.velocity.y);
 
             rb2.velocity = Vector3.SmoothDamp(rb2.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+
+            //if (rb2.velocity.magnitude > 2f)
+            //{
+            //    Debug.Log("Sound on");
+            //    FindObjectOfType<AudioManager>().Play("PlayerWalk");
+            //}
+
 
             if (move > 0 && !m_FacingRight || move < 0 && m_FacingRight)
             {
@@ -284,16 +382,28 @@ public class Character : MonoBehaviour {
         }
 
     }
+
     public void GethitbyEnemies() {
+
+        FindObjectOfType<AudioManager>().Play("other");
 
         if (!isDead)
         {
             life -= 1;
+
             Debug.Log("Current life:" + life);
+
             if (life <= 0)
             {
                 isDead = true;
             }
+        }
+
+        if (m_AirControl)
+        {
+            animator.SetBool("isFlyIdle", false);
+            rb2.gravityScale = 2.5f;
+            m_AirControl = false;
         }
     }
 
@@ -307,13 +417,23 @@ public class Character : MonoBehaviour {
         transform.localScale = theScale;
     }
 
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemies_Light" || collision.gameObject.tag == "Enemy")
         {
+            
+            if (collision.gameObject.tag == "Enemy")
+            {
+                GameManager.instance.removeEnemy(collision.gameObject);
+
+                if (deathExpotion)
+                {
+                    Instantiate(deathExpotion, transform.position, transform.rotation);
+                }  
+            }
             Destroy(collision.gameObject);
 
-            Debug.Log("Test");
             if (isDead)
             {
                 Destroy(gameObject);
@@ -328,6 +448,8 @@ public class Character : MonoBehaviour {
 
         if (collision.gameObject.tag == "Enemies_InBubble")
         {
+            FindObjectOfType<AudioManager>().Play("bubbleexlp");
+
             Vector3 pos = gameObject.transform.position + new Vector3(0.0f, 2.0f, 0.0f);
 
             Enemy_InBubble test = collision.gameObject.GetComponent("Enemy_InBubble") as Enemy_InBubble;
@@ -358,11 +480,18 @@ public class Character : MonoBehaviour {
 
             Debug.Log(test.enemiesName);
 
+            if (bubbleExpotion)
+            {
+                Instantiate(bubbleExpotion, transform.position, transform.rotation);
+            }
+
             Destroy(collision.gameObject);
         }
 
         if (collision.gameObject.tag == "Collectable")
         {
+            FindObjectOfType<AudioManager>().Play("Collectiblecollected");
+            
             // Create a reference to the Script on 'Collectible'
             Collectible c = collision.gameObject.GetComponent<Collectible>();
 
@@ -375,24 +504,39 @@ public class Character : MonoBehaviour {
 
             // Delete gameObject that collided with 'Character'
             Destroy(collision.gameObject);
+            //FindObjectOfType<AudioManager>().Play("Wind");
         }
     }
 
-   
+
+    //void updateEnemy() {
+
+    //    Transform parent = level[currentlevel].gameObject.transform;
+
+    //    foreach (Transform enemy in parent)
+    //    {
+    //        if (enemy.CompareTag("Enemy"))
+    //        {
+    //            enemyinlevel.Add(enemy.gameObject);
+    //        }
+    //    }
+
+    //}
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.tag == "Startpoint")
+        {
+            GameManager.instance.gm = GameState.Game;
+            animator.SetBool("isChange", true);
+            
+        }
 
-        if (collision.gameObject.tag == "Teleport_Btm")
-        {
-            StartCoroutine(Teleports());
-        }
-        if (collision.gameObject.tag == "Teleport_Btm")
-        {
-            StartCoroutine(Teleports());
-        }
 
         if (collision.gameObject.tag == "Powerup_JumpMode")
         {
+            FindObjectOfType<AudioManager>().Play("Powerupcollected");
+            Debug.Log("Why is jump animotr work");
             animator.SetBool("isPowerUp", true);
             // Add the powerup
             jumpForce += jumpBoost;
@@ -403,8 +547,13 @@ public class Character : MonoBehaviour {
             // Delete gameObject that collided with 'Character'
             Destroy(collision.gameObject);
         }
-
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        
+    }
+
     IEnumerator stopJumpMode()
     {
         yield return new WaitForSeconds(powerUpTime);
@@ -414,19 +563,35 @@ public class Character : MonoBehaviour {
         animator.SetBool("isPowerUp", false);
 
     }
-
-    IEnumerator Teleports()
+    IEnumerator timebetweentwolevel()
     {
-        yield return new WaitForSeconds(0.6f);
-        Debug.Log("Test");
+        yield return new WaitForSeconds(changelevelTime);
+        // Turn off Powerup after specified time
 
-        gameObject.transform.position = new Vector2(gameObject.transform.position.x, topTeleport.transform.position.y);
     }
+    //IEnumerator Teleports()
+    //{
+    //    yield return new WaitForSeconds(100);
+    //    gameObject.transform.position = new Vector2(gameObject.transform.position.x, topTeleport.transform.position.y);
+    //}
 
     IEnumerator setGravityScale()
     {
         yield return new WaitForSeconds(10.0f);
     }
+  
+    public int points {
 
-    public int points { get; set; }
+        get
+        {
+            return _points;
+        }
+        set
+        {
+            _points = value;
+
+            if (txtScore)
+                txtScore.text = "Score: " + points;
+        }
+    }
 }

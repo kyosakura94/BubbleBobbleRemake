@@ -11,8 +11,8 @@ TextureImporter:
     21300012: Player_Ani_Blow2
     21300014: Bubble_Ani_Idle1
     21300016: Bubble_Ani_Idle2
-    21300018: Player_Ani_Fly1
-    21300020: Player_Ani_Fly2
+    21300018: Player_Ani_Open_Fly1
+    21300020: Player_Ani_Open_Fly2
     21300022: Player_Ani_Idle2
     21300024: Player_Ani_Idle1
     21300026: Player_Ani_Jump1
@@ -26,6 +26,8 @@ TextureImporter:
     21300042: Player_die_02
     21300044: Player_die_03
     21300046: Player_die_04
+    21300048: Player_Victory1
+    21300050: Player_Victory2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -288,7 +290,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Ani_Fly1
+      name: Player_Ani_Open_Fly1
       rect:
         serializedVersion: 2
         x: 9
@@ -308,7 +310,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Ani_Fly2
+      name: Player_Ani_Open_Fly2
       rect:
         serializedVersion: 2
         x: 42
@@ -536,7 +538,7 @@ TextureImporter:
         width: 22
         height: 21
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -556,7 +558,7 @@ TextureImporter:
         width: 22
         height: 21
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -576,13 +578,53 @@ TextureImporter:
         width: 22
         height: 21
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 8a60390fc03ef244bb1f23e2b6dda06f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Victory1
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 318
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea30b205fd2ef994f923646e0a621014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Victory2
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 318
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c2510de08739a943b9f4e0d52ccec6e
       vertices: []
       indices: 
       edges: []

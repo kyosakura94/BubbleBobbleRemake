@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Bubble_level_01.unity
+- path: Assets/Scenes/Screen_Menu.unity
   isLoaded: 1
   isActive: 1
